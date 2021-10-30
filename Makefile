@@ -1,7 +1,7 @@
 include config.mk
 
 .PHONY: options
-
+MAIN = ${OBJ_DIR}/driver.o
 SRC = $(wildcard ${SRC_DIR}/*.c)
 OBJ = $(patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRC})
 
@@ -18,11 +18,18 @@ options:
 ${NAME}: ${OBJ}
 	${CC} ${CFLAGS} $^ -o $@
 
+# The pipe is pretty cool
+${OBJ}: | ${OBJ_DIR}
+
 ${OBJ_DIR}:
 	mkdir $@
 
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.c ${OBJ_DIR}
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.c
 	${CC} -c ${CFLAGS} $< -o $@
+ 
+test: ${OBJ}
+	$(MAKE) -C test/ A_INCLUDE=../${INCLUDE} A_OBJ="$(patsubst %,../%,$(filter-out ${MAIN},${OBJ}))"
+A_LDFLAGS=${LDFLAGS}
 
 sdist:
 	mkdir -p ${NAME}-${VERSION}
@@ -30,6 +37,7 @@ sdist:
 	tar -cvzf ${NAME}-${VERSION}.tar.gz ${NAME}-${VERSION}
 
 clean:
+	$(MAKE) -C test/ clean
 	rm -rf ${OBJ_DIR} ${NAME}
 
 install: all
