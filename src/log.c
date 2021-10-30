@@ -60,7 +60,10 @@ int log_init(int fd, loglevel severity)
 
 int _log_call_site(const char *file, const int line, const char *func)
 {
-        dprintf(logfd, "[ %s:%d:%s() ]", file, line, func);
+        // Only called with LOG_DBG() although the severity check is repeated,
+        // we keep the severity in this compilation unit, and the log call generic
+        if (level == DEBUG)
+                dprintf(logfd, "[ %s:%d:%s() ]", file, line, func);
         return 0;
 }
 int _log_to_fd(loglevel severity, char *fmt, ...)
@@ -69,7 +72,7 @@ int _log_to_fd(loglevel severity, char *fmt, ...)
         if (severity < level)
                 return 0;
         dprintf(logfd, currprompt[severity]);
-        
+
         va_start(args, fmt);
         vdprintf(logfd, fmt, args);
         va_end(args);
