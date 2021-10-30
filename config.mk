@@ -4,7 +4,7 @@ NAME = httposms-server
 VERSION = v0.0.0-prerelease
 
 CC = gcc
-CFLAGS = -std=c99 -O2 -pedantic -Wall -DNAME="${NAME}" -DVERSION="${VERSION}"
+CFLAGS = -std=c99 -O2 -pedantic -Iinclude -Wall -DNAME="${NAME}" -DVERSION="${VERSION}"
 LDFLAGS= 
 
 SRC_DIR = src
