@@ -3,15 +3,31 @@
 httposms-server \- HTTP tunnel over SMS server
 .SH SYNOPSIS
 .B httposms-server
-.RB [ \-v ]
+[OPTIONS]...
+[DEVICE]
 .SH DESCRIPTION
-
-Placeholder, to be written
+Using the GPRS/GSM modem represented by DEVICE
+tunnel HTTP traffic over SMS from requests to the modem
+By default the process will attempt to daemonize, and write its'
+output to the file "/tmp/httposms.log"
 
 .SH OPTIONS
 .TP
-.B \-v
-Placeholder, to be written
+.B \-\-version, \-v
+Print the package version and exit
+.TP
+.B \-\-no\-daemon, \-n
+Do not attempt to daemonize the process
+.TP
+.B \-\-log\-level, \-l
+The log severity [DEBUG, INFO, WARN, FAIL]
+.TP
+.B \-\-device, \-d
+The device file for the GPRS/GSM module, defaults to "/dev/ttyAMA0"
+.TP
+.B \-\-help, \-h
+Print this message and exit
+
 .SH BUGS
-Send all bug reports https://github.com/httposms/httposms-server.com
+Send all bug reports https://github.com/httposms/httposms-server
 
