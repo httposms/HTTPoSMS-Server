@@ -3,4 +3,6 @@ dist: trusty
 language: c
 
 script:
+  - make test
+  - ./test/tests
   - make

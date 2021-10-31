@@ -2,7 +2,7 @@ EXEC = tests
 
 CC = gcc
 INCLUDE = include
-CFLAGS = -std=c99 -O2 -pedantic -I${A_INCLUDE} -Wall
+CFLAGS = -std=c99 -O2 -pedantic -I${A_INCLUDE} -I${INCLUDE} -Wall
 LDFLAGS= -lcunit
 
 SRC_DIR = src
