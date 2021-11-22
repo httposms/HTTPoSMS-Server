@@ -7,16 +7,21 @@ OBJ = $(patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRC})
 
 all: options ${NAME}
 
+debug: CFLAGS += -g
+debug: all
+
 options:
-	@echo Build options
+	@echo ""
+	@echo "=====Build options====="
 	@echo "CFLAGS   = ${CFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
 	@echo "SRC      = ${SRC}"
 	@echo "OBJ      = ${OBJ}"
+	@echo ""
 
 ${NAME}: ${OBJ}
-	${CC} ${CFLAGS} $^ -o $@
+	${CC} ${CFLAGS} $^ -o $@ ${LDFLAGS}
 
 # The pipe is pretty cool
 ${OBJ}: | ${OBJ_DIR}
@@ -25,10 +30,10 @@ ${OBJ_DIR}:
 	mkdir $@
 
 ${OBJ_DIR}/%.o: ${SRC_DIR}/%.c
-	${CC} -c ${CFLAGS} $< -o $@
+	${CC} -c ${CFLAGS} $< -o $@ 
  
 test: ${OBJ}
-	$(MAKE) -C test/ A_INCLUDE=../${INCLUDE} A_OBJ="$(patsubst %,../%,$(filter-out ${MAIN},${OBJ}))"
+	$(MAKE) -C test/ A_INCLUDE=${INCLUDE} A_OBJ="$(patsubst %,../%,$(filter-out ${MAIN},${OBJ}))" A_LDFLAGS="${LDFLAGS}"
 A_LDFLAGS=${LDFLAGS}
 
 sdist:

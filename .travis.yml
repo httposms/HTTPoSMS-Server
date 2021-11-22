@@ -4,7 +4,7 @@ language: c
 sudo: required
 
 before_install:
-  - sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
+  - sudo apt-get install libcunit1-dev libcurl3-dev libxml2-dev zlib1g-dev
 
 script:
   - make test

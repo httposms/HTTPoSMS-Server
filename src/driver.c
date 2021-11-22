@@ -13,13 +13,15 @@
 #include <limits.h>
 #include <errno.h>
 
+#include "at.h"
 #include "common.h"
+#include "net.h"
 #include "log.h"
 
-#define DEFAULT_DEVICE "/dev/ttyAMA0"
-#define DEFAULT_LOG "/tmp/httposms.log"
-#define STRINGIZE(x) #x
-#define STR(x) STRINGIZE(x)
+#define DEFAULT_DEVICE  "/dev/ttyAMA0"
+#define DEFAULT_LOG     "/tmp/httposms.log"
+#define STRINGIZE(x)    #x
+#define STR(x)          STRINGIZE(x)
 
 
 static void usage();
@@ -27,10 +29,10 @@ static void mkdaemon();
 
 int main(int argc, char *argv[])
 {
-        int daemonize = 1;
-        int logfd = STDOUT_FILENO;
-        loglevel verbosity = DEBUG;
-        char *device = DEFAULT_DEVICE;
+        int daemonize           = 1;
+        int logfd               = STDOUT_FILENO;
+        loglevel verbosity      = DEBUG;
+        char *device            = DEFAULT_DEVICE;
 
         static struct option longopts[] = {
                 {"version", no_argument, NULL, 'v'},
@@ -78,7 +80,28 @@ int main(int argc, char *argv[])
         
         log_init(logfd, verbosity);
 
-        return 0;
+        int err;
+        int net_fd[2], at_fd[2];
+
+        if(pipe(net_fd) < 0) {
+                LOG_FAIL("Could not create pipe\n");
+                return MAJOR_ERROR;
+        }
+        if(pipe(at_fd) < 0) {
+                LOG_FAIL("Could not create pipe\n");
+                return MAJOR_ERROR;
+        }
+        
+        err = net_init(net_fd, at_fd[WRITE_FD]);
+        if(err)
+                exit(MAJOR_ERROR);
+        
+        char url[] = "http://mylesalamb.com";
+        for(int i = 0; i < 2000; i++)
+        net_add_job(url);
+        at_init(at_fd[READ_FD], net_fd[WRITE_FD], device);
+        sleep(10);
+        return NO_ERROR;
 }
 
 static void usage()
