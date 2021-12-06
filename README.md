@@ -1,3 +1,4 @@
+```
 HTTPOSMS-SERVER(1)                             General Commands Manual                             HTTPOSMS-SERVER(1)
 
 NAME
@@ -30,3 +31,4 @@ BUGS
        Send all bug reports https://github.com/httposms/httposms-server
 
                                           httposms-server-v0.0.0-prerelease                        HTTPOSMS-SERVER(1)
+```

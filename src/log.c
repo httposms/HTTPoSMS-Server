@@ -14,6 +14,8 @@ static int logfd;
 static char **currprompt;
 static loglevel level = DEBUG;
 
+pthread_mutex_t _log_lck = PTHREAD_MUTEX_INITIALIZER;
+
 static char *ncolor[] = {
         "[ DBUG ] ",
         "[ INFO ] ",
@@ -60,14 +62,23 @@ int log_init(int fd, loglevel severity)
 
 int _log_call_site(const char *file, const int line, const char *func)
 {
-        // Only called with LOG_DBG() although the severity check is repeated,
-        // we keep the severity in this compilation unit, and the log call generic
+        /* 
+         * Only called with LOG_DBG() although the severity check is repeated,
+         * we keep the severity in this compilation unit, and the log call generic
+         */         
         if (level == DEBUG)
                 dprintf(logfd, "[ %s:%d:%s() ]", file, line, func);
         return 0;
 }
 int _log_to_fd(loglevel severity, char *fmt, ...)
 {
+        /* 
+         * Subject to race between writes so protect with a lock 
+         * this could be fixed by combining write opts,
+         *
+         * But lets not introduce buffer overflows or overly
+         * complex dynamic memory operations
+         */
         va_list args;
         if (severity < level)
                 return 0;
@@ -76,6 +87,5 @@ int _log_to_fd(loglevel severity, char *fmt, ...)
         va_start(args, fmt);
         vdprintf(logfd, fmt, args);
         va_end(args);
-
         return 0;
 }
