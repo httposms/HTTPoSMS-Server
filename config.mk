@@ -15,7 +15,6 @@ OBJ_DIR = obj
 PREFIX = /usr/local
 MANPREFIX = ${PREFIX}/share/man
 
-ifeq (${CI},true)
+# On deb based, this link is not supplied by xml2
 LDFLAGS += -lz
-endif
 

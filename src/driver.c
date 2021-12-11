@@ -18,7 +18,7 @@
 #include "net.h"
 #include "log.h"
 
-#define DEFAULT_DEVICE  "/dev/ttyAMA0"
+#define DEFAULT_DEVICE  "/dev/ttyS0"
 #define DEFAULT_LOG     "/tmp/httposms.log"
 #define STRINGIZE(x)    #x
 #define STR(x)          STRINGIZE(x)
@@ -96,9 +96,6 @@ int main(int argc, char *argv[])
         if(err)
                 exit(MAJOR_ERROR);
         
-        char url[] = "http://mylesalamb.com";
-        for(int i = 0; i < 2000; i++)
-        net_add_job(url);
         at_init(at_fd[READ_FD], net_fd[WRITE_FD], device);
         sleep(10);
         return NO_ERROR;

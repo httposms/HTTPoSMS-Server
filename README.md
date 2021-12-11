@@ -22,7 +22,7 @@ OPTIONS
               The log severity [DEBUG, INFO, WARN, FAIL]
 
        --device, -d
-              The device file for the GPRS/GSM module, defaults to "/dev/ttyAMA0"
+              The device file for the GPRS/GSM module, defaults to "/dev/ttyS0"
 
        --help, -h
               Print this message and exit
